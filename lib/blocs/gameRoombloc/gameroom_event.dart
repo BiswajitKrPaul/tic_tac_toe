@@ -7,5 +7,11 @@ class GameroomEvent with _$GameroomEvent {
   }) = CreateGameRoom;
   const factory GameroomEvent.joinLobby({
     required String roomCode,
+    required String playerTwo,
   }) = JoinGameRoom;
+
+  const factory GameroomEvent.secondPlayerJoinded({
+    required String playerTwo,
+    required String objectId,
+  }) = GameRoomSecondPlayerJoinedEvent;
 }

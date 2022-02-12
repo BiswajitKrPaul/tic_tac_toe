@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
-import 'package:tic_tac_toe/blocs/bloc/gameroom_bloc.dart';
+import 'package:tic_tac_toe/blocs/gameRoombloc/gameroom_bloc.dart';
+import 'package:tic_tac_toe/routes/lobby_room.dart';
 import 'package:tic_tac_toe/routes/menu_screen.dart';
 import 'package:tic_tac_toe/theme/app_theme.dart';
 import 'package:tic_tac_toe/utils/api_constants.dart';
@@ -16,7 +17,9 @@ void main() async {
   );
   runApp(MultiBlocProvider(
     providers: [
-      BlocProvider(create: (ctx) => GameroomBloc()),
+      BlocProvider(
+        create: (ctx) => GameroomBloc(),
+      ),
     ],
     child: const MyApp(),
   ));
@@ -33,6 +36,9 @@ class MyApp extends StatelessWidget {
       theme: basicTheme(),
       debugShowCheckedModeBanner: false,
       home: const MenuHome(),
+      routes: {
+        LobbyRoom.routeName: (ctx) => const LobbyRoom(),
+      },
     );
   }
 }

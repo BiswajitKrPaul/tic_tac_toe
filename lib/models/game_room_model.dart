@@ -1,12 +1,42 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+// To parse this JSON data, do
+//
+//     final gameRoomModel = gameRoomModelFromJson(jsonString);
 
-part 'game_room_model.freezed.dart';
+import 'dart:convert';
 
-@freezed
-class GameRoomModel with _$GameRoomModel {
-  factory GameRoomModel({
-    required String objectID,
-    required String playerOne,
-    required String playerTwo,
-  }) = _GameRoomModel;
+GameRoomModel gameRoomModelFromJson(String str) =>
+    GameRoomModel.fromJson(json.decode(str));
+
+String gameRoomModelToJson(GameRoomModel data) => json.encode(data.toJson());
+
+class GameRoomModel {
+  GameRoomModel({
+    required this.objectId,
+    required this.createdAt,
+    required this.playerOne,
+    required this.playerTwo,
+    required this.hasGameStarted,
+  });
+
+  final String objectId;
+  final DateTime createdAt;
+  final String playerOne;
+  final String playerTwo;
+  final bool hasGameStarted;
+
+  factory GameRoomModel.fromJson(Map<String, dynamic> json) => GameRoomModel(
+        objectId: json["objectId"],
+        createdAt: DateTime.parse(json["createdAt"]),
+        playerOne: json["PlayerOne"],
+        playerTwo: json["PlayerTwo"],
+        hasGameStarted: json["hasGameStarted"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "objectId": objectId,
+        "createdAt": createdAt.toIso8601String(),
+        "PlayerOne": playerOne,
+        "PlayerTwo": playerTwo,
+        "hasGameStarted": hasGameStarted,
+      };
 }

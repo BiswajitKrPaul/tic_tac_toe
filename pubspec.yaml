@@ -37,6 +37,7 @@ dependencies:
   parse_server_sdk_flutter: ^3.1.0
   flutter_bloc: ^8.0.1
   freezed_annotation: ^1.1.0
+  json_serializable: ^6.1.4
 
 dev_dependencies:
   flutter_test:

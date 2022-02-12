@@ -24,9 +24,19 @@ class _$GameroomEventTearOff {
     );
   }
 
-  JoinGameRoom joinLobby({required String roomCode}) {
+  JoinGameRoom joinLobby(
+      {required String roomCode, required String playerTwo}) {
     return JoinGameRoom(
       roomCode: roomCode,
+      playerTwo: playerTwo,
+    );
+  }
+
+  GameRoomSecondPlayerJoinedEvent secondPlayerJoinded(
+      {required String playerTwo, required String objectId}) {
+    return GameRoomSecondPlayerJoinedEvent(
+      playerTwo: playerTwo,
+      objectId: objectId,
     );
   }
 }
@@ -39,19 +49,23 @@ mixin _$GameroomEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String playerOne) createLobby,
-    required TResult Function(String roomCode) joinLobby,
+    required TResult Function(String roomCode, String playerTwo) joinLobby,
+    required TResult Function(String playerTwo, String objectId)
+        secondPlayerJoinded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String playerOne)? createLobby,
-    TResult Function(String roomCode)? joinLobby,
+    TResult Function(String roomCode, String playerTwo)? joinLobby,
+    TResult Function(String playerTwo, String objectId)? secondPlayerJoinded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String playerOne)? createLobby,
-    TResult Function(String roomCode)? joinLobby,
+    TResult Function(String roomCode, String playerTwo)? joinLobby,
+    TResult Function(String playerTwo, String objectId)? secondPlayerJoinded,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -59,18 +73,24 @@ mixin _$GameroomEvent {
   TResult map<TResult extends Object?>({
     required TResult Function(CreateGameRoom value) createLobby,
     required TResult Function(JoinGameRoom value) joinLobby,
+    required TResult Function(GameRoomSecondPlayerJoinedEvent value)
+        secondPlayerJoinded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(CreateGameRoom value)? createLobby,
     TResult Function(JoinGameRoom value)? joinLobby,
+    TResult Function(GameRoomSecondPlayerJoinedEvent value)?
+        secondPlayerJoinded,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(CreateGameRoom value)? createLobby,
     TResult Function(JoinGameRoom value)? joinLobby,
+    TResult Function(GameRoomSecondPlayerJoinedEvent value)?
+        secondPlayerJoinded,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -167,7 +187,9 @@ class _$CreateGameRoom with DiagnosticableTreeMixin implements CreateGameRoom {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String playerOne) createLobby,
-    required TResult Function(String roomCode) joinLobby,
+    required TResult Function(String roomCode, String playerTwo) joinLobby,
+    required TResult Function(String playerTwo, String objectId)
+        secondPlayerJoinded,
   }) {
     return createLobby(playerOne);
   }
@@ -176,7 +198,8 @@ class _$CreateGameRoom with DiagnosticableTreeMixin implements CreateGameRoom {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String playerOne)? createLobby,
-    TResult Function(String roomCode)? joinLobby,
+    TResult Function(String roomCode, String playerTwo)? joinLobby,
+    TResult Function(String playerTwo, String objectId)? secondPlayerJoinded,
   }) {
     return createLobby?.call(playerOne);
   }
@@ -185,7 +208,8 @@ class _$CreateGameRoom with DiagnosticableTreeMixin implements CreateGameRoom {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String playerOne)? createLobby,
-    TResult Function(String roomCode)? joinLobby,
+    TResult Function(String roomCode, String playerTwo)? joinLobby,
+    TResult Function(String playerTwo, String objectId)? secondPlayerJoinded,
     required TResult orElse(),
   }) {
     if (createLobby != null) {
@@ -199,6 +223,8 @@ class _$CreateGameRoom with DiagnosticableTreeMixin implements CreateGameRoom {
   TResult map<TResult extends Object?>({
     required TResult Function(CreateGameRoom value) createLobby,
     required TResult Function(JoinGameRoom value) joinLobby,
+    required TResult Function(GameRoomSecondPlayerJoinedEvent value)
+        secondPlayerJoinded,
   }) {
     return createLobby(this);
   }
@@ -208,6 +234,8 @@ class _$CreateGameRoom with DiagnosticableTreeMixin implements CreateGameRoom {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(CreateGameRoom value)? createLobby,
     TResult Function(JoinGameRoom value)? joinLobby,
+    TResult Function(GameRoomSecondPlayerJoinedEvent value)?
+        secondPlayerJoinded,
   }) {
     return createLobby?.call(this);
   }
@@ -217,6 +245,8 @@ class _$CreateGameRoom with DiagnosticableTreeMixin implements CreateGameRoom {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(CreateGameRoom value)? createLobby,
     TResult Function(JoinGameRoom value)? joinLobby,
+    TResult Function(GameRoomSecondPlayerJoinedEvent value)?
+        secondPlayerJoinded,
     required TResult orElse(),
   }) {
     if (createLobby != null) {
@@ -240,7 +270,7 @@ abstract class $JoinGameRoomCopyWith<$Res> {
   factory $JoinGameRoomCopyWith(
           JoinGameRoom value, $Res Function(JoinGameRoom) then) =
       _$JoinGameRoomCopyWithImpl<$Res>;
-  $Res call({String roomCode});
+  $Res call({String roomCode, String playerTwo});
 }
 
 /// @nodoc
@@ -256,11 +286,16 @@ class _$JoinGameRoomCopyWithImpl<$Res> extends _$GameroomEventCopyWithImpl<$Res>
   @override
   $Res call({
     Object? roomCode = freezed,
+    Object? playerTwo = freezed,
   }) {
     return _then(JoinGameRoom(
       roomCode: roomCode == freezed
           ? _value.roomCode
           : roomCode // ignore: cast_nullable_to_non_nullable
+              as String,
+      playerTwo: playerTwo == freezed
+          ? _value.playerTwo
+          : playerTwo // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -269,14 +304,16 @@ class _$JoinGameRoomCopyWithImpl<$Res> extends _$GameroomEventCopyWithImpl<$Res>
 /// @nodoc
 
 class _$JoinGameRoom with DiagnosticableTreeMixin implements JoinGameRoom {
-  const _$JoinGameRoom({required this.roomCode});
+  const _$JoinGameRoom({required this.roomCode, required this.playerTwo});
 
   @override
   final String roomCode;
+  @override
+  final String playerTwo;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'GameroomEvent.joinLobby(roomCode: $roomCode)';
+    return 'GameroomEvent.joinLobby(roomCode: $roomCode, playerTwo: $playerTwo)';
   }
 
   @override
@@ -284,7 +321,8 @@ class _$JoinGameRoom with DiagnosticableTreeMixin implements JoinGameRoom {
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'GameroomEvent.joinLobby'))
-      ..add(DiagnosticsProperty('roomCode', roomCode));
+      ..add(DiagnosticsProperty('roomCode', roomCode))
+      ..add(DiagnosticsProperty('playerTwo', playerTwo));
   }
 
   @override
@@ -292,12 +330,15 @@ class _$JoinGameRoom with DiagnosticableTreeMixin implements JoinGameRoom {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is JoinGameRoom &&
-            const DeepCollectionEquality().equals(other.roomCode, roomCode));
+            const DeepCollectionEquality().equals(other.roomCode, roomCode) &&
+            const DeepCollectionEquality().equals(other.playerTwo, playerTwo));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(roomCode));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(roomCode),
+      const DeepCollectionEquality().hash(playerTwo));
 
   @JsonKey(ignore: true)
   @override
@@ -308,29 +349,33 @@ class _$JoinGameRoom with DiagnosticableTreeMixin implements JoinGameRoom {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(String playerOne) createLobby,
-    required TResult Function(String roomCode) joinLobby,
+    required TResult Function(String roomCode, String playerTwo) joinLobby,
+    required TResult Function(String playerTwo, String objectId)
+        secondPlayerJoinded,
   }) {
-    return joinLobby(roomCode);
+    return joinLobby(roomCode, playerTwo);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(String playerOne)? createLobby,
-    TResult Function(String roomCode)? joinLobby,
+    TResult Function(String roomCode, String playerTwo)? joinLobby,
+    TResult Function(String playerTwo, String objectId)? secondPlayerJoinded,
   }) {
-    return joinLobby?.call(roomCode);
+    return joinLobby?.call(roomCode, playerTwo);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(String playerOne)? createLobby,
-    TResult Function(String roomCode)? joinLobby,
+    TResult Function(String roomCode, String playerTwo)? joinLobby,
+    TResult Function(String playerTwo, String objectId)? secondPlayerJoinded,
     required TResult orElse(),
   }) {
     if (joinLobby != null) {
-      return joinLobby(roomCode);
+      return joinLobby(roomCode, playerTwo);
     }
     return orElse();
   }
@@ -340,6 +385,8 @@ class _$JoinGameRoom with DiagnosticableTreeMixin implements JoinGameRoom {
   TResult map<TResult extends Object?>({
     required TResult Function(CreateGameRoom value) createLobby,
     required TResult Function(JoinGameRoom value) joinLobby,
+    required TResult Function(GameRoomSecondPlayerJoinedEvent value)
+        secondPlayerJoinded,
   }) {
     return joinLobby(this);
   }
@@ -349,6 +396,8 @@ class _$JoinGameRoom with DiagnosticableTreeMixin implements JoinGameRoom {
   TResult? mapOrNull<TResult extends Object?>({
     TResult Function(CreateGameRoom value)? createLobby,
     TResult Function(JoinGameRoom value)? joinLobby,
+    TResult Function(GameRoomSecondPlayerJoinedEvent value)?
+        secondPlayerJoinded,
   }) {
     return joinLobby?.call(this);
   }
@@ -358,6 +407,8 @@ class _$JoinGameRoom with DiagnosticableTreeMixin implements JoinGameRoom {
   TResult maybeMap<TResult extends Object?>({
     TResult Function(CreateGameRoom value)? createLobby,
     TResult Function(JoinGameRoom value)? joinLobby,
+    TResult Function(GameRoomSecondPlayerJoinedEvent value)?
+        secondPlayerJoinded,
     required TResult orElse(),
   }) {
     if (joinLobby != null) {
@@ -368,12 +419,187 @@ class _$JoinGameRoom with DiagnosticableTreeMixin implements JoinGameRoom {
 }
 
 abstract class JoinGameRoom implements GameroomEvent {
-  const factory JoinGameRoom({required String roomCode}) = _$JoinGameRoom;
+  const factory JoinGameRoom(
+      {required String roomCode, required String playerTwo}) = _$JoinGameRoom;
 
   String get roomCode;
+  String get playerTwo;
   @JsonKey(ignore: true)
   $JoinGameRoomCopyWith<JoinGameRoom> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $GameRoomSecondPlayerJoinedEventCopyWith<$Res> {
+  factory $GameRoomSecondPlayerJoinedEventCopyWith(
+          GameRoomSecondPlayerJoinedEvent value,
+          $Res Function(GameRoomSecondPlayerJoinedEvent) then) =
+      _$GameRoomSecondPlayerJoinedEventCopyWithImpl<$Res>;
+  $Res call({String playerTwo, String objectId});
+}
+
+/// @nodoc
+class _$GameRoomSecondPlayerJoinedEventCopyWithImpl<$Res>
+    extends _$GameroomEventCopyWithImpl<$Res>
+    implements $GameRoomSecondPlayerJoinedEventCopyWith<$Res> {
+  _$GameRoomSecondPlayerJoinedEventCopyWithImpl(
+      GameRoomSecondPlayerJoinedEvent _value,
+      $Res Function(GameRoomSecondPlayerJoinedEvent) _then)
+      : super(_value, (v) => _then(v as GameRoomSecondPlayerJoinedEvent));
+
+  @override
+  GameRoomSecondPlayerJoinedEvent get _value =>
+      super._value as GameRoomSecondPlayerJoinedEvent;
+
+  @override
+  $Res call({
+    Object? playerTwo = freezed,
+    Object? objectId = freezed,
+  }) {
+    return _then(GameRoomSecondPlayerJoinedEvent(
+      playerTwo: playerTwo == freezed
+          ? _value.playerTwo
+          : playerTwo // ignore: cast_nullable_to_non_nullable
+              as String,
+      objectId: objectId == freezed
+          ? _value.objectId
+          : objectId // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$GameRoomSecondPlayerJoinedEvent
+    with DiagnosticableTreeMixin
+    implements GameRoomSecondPlayerJoinedEvent {
+  const _$GameRoomSecondPlayerJoinedEvent(
+      {required this.playerTwo, required this.objectId});
+
+  @override
+  final String playerTwo;
+  @override
+  final String objectId;
+
+  @override
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'GameroomEvent.secondPlayerJoinded(playerTwo: $playerTwo, objectId: $objectId)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'GameroomEvent.secondPlayerJoinded'))
+      ..add(DiagnosticsProperty('playerTwo', playerTwo))
+      ..add(DiagnosticsProperty('objectId', objectId));
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is GameRoomSecondPlayerJoinedEvent &&
+            const DeepCollectionEquality().equals(other.playerTwo, playerTwo) &&
+            const DeepCollectionEquality().equals(other.objectId, objectId));
+  }
+
+  @override
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(playerTwo),
+      const DeepCollectionEquality().hash(objectId));
+
+  @JsonKey(ignore: true)
+  @override
+  $GameRoomSecondPlayerJoinedEventCopyWith<GameRoomSecondPlayerJoinedEvent>
+      get copyWith => _$GameRoomSecondPlayerJoinedEventCopyWithImpl<
+          GameRoomSecondPlayerJoinedEvent>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(String playerOne) createLobby,
+    required TResult Function(String roomCode, String playerTwo) joinLobby,
+    required TResult Function(String playerTwo, String objectId)
+        secondPlayerJoinded,
+  }) {
+    return secondPlayerJoinded(playerTwo, objectId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function(String playerOne)? createLobby,
+    TResult Function(String roomCode, String playerTwo)? joinLobby,
+    TResult Function(String playerTwo, String objectId)? secondPlayerJoinded,
+  }) {
+    return secondPlayerJoinded?.call(playerTwo, objectId);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(String playerOne)? createLobby,
+    TResult Function(String roomCode, String playerTwo)? joinLobby,
+    TResult Function(String playerTwo, String objectId)? secondPlayerJoinded,
+    required TResult orElse(),
+  }) {
+    if (secondPlayerJoinded != null) {
+      return secondPlayerJoinded(playerTwo, objectId);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(CreateGameRoom value) createLobby,
+    required TResult Function(JoinGameRoom value) joinLobby,
+    required TResult Function(GameRoomSecondPlayerJoinedEvent value)
+        secondPlayerJoinded,
+  }) {
+    return secondPlayerJoinded(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(CreateGameRoom value)? createLobby,
+    TResult Function(JoinGameRoom value)? joinLobby,
+    TResult Function(GameRoomSecondPlayerJoinedEvent value)?
+        secondPlayerJoinded,
+  }) {
+    return secondPlayerJoinded?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(CreateGameRoom value)? createLobby,
+    TResult Function(JoinGameRoom value)? joinLobby,
+    TResult Function(GameRoomSecondPlayerJoinedEvent value)?
+        secondPlayerJoinded,
+    required TResult orElse(),
+  }) {
+    if (secondPlayerJoinded != null) {
+      return secondPlayerJoinded(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class GameRoomSecondPlayerJoinedEvent implements GameroomEvent {
+  const factory GameRoomSecondPlayerJoinedEvent(
+      {required String playerTwo,
+      required String objectId}) = _$GameRoomSecondPlayerJoinedEvent;
+
+  String get playerTwo;
+  String get objectId;
+  @JsonKey(ignore: true)
+  $GameRoomSecondPlayerJoinedEventCopyWith<GameRoomSecondPlayerJoinedEvent>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -389,16 +615,13 @@ class _$GameroomStateTearOff {
   }
 
   GameRoomLobbyCreatedState lobbyCreated(
-      {required GameRoomModel gameRoomModel}) {
+      {required GameRoomModel gameRoomModel,
+      required bool isClosed,
+      required PlayerStatus isPlayerOne}) {
     return GameRoomLobbyCreatedState(
       gameRoomModel: gameRoomModel,
-    );
-  }
-
-  GameRoomPlayerJoinedState playerJoined(
-      {required GameRoomModel gameRoomModel}) {
-    return GameRoomPlayerJoinedState(
-      gameRoomModel: gameRoomModel,
+      isClosed: isClosed,
+      isPlayerOne: isPlayerOne,
     );
   }
 
@@ -418,8 +641,9 @@ mixin _$GameroomState {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(GameRoomModel gameRoomModel) lobbyCreated,
-    required TResult Function(GameRoomModel gameRoomModel) playerJoined,
+    required TResult Function(GameRoomModel gameRoomModel, bool isClosed,
+            PlayerStatus isPlayerOne)
+        lobbyCreated,
     required TResult Function(String errorTxt) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -427,8 +651,9 @@ mixin _$GameroomState {
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(GameRoomModel gameRoomModel)? lobbyCreated,
-    TResult Function(GameRoomModel gameRoomModel)? playerJoined,
+    TResult Function(GameRoomModel gameRoomModel, bool isClosed,
+            PlayerStatus isPlayerOne)?
+        lobbyCreated,
     TResult Function(String errorTxt)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -436,8 +661,9 @@ mixin _$GameroomState {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(GameRoomModel gameRoomModel)? lobbyCreated,
-    TResult Function(GameRoomModel gameRoomModel)? playerJoined,
+    TResult Function(GameRoomModel gameRoomModel, bool isClosed,
+            PlayerStatus isPlayerOne)?
+        lobbyCreated,
     TResult Function(String errorTxt)? error,
     required TResult orElse(),
   }) =>
@@ -447,7 +673,6 @@ mixin _$GameroomState {
     required TResult Function(GameRoomInitialState value) initial,
     required TResult Function(GameRoomLoadingState value) loading,
     required TResult Function(GameRoomLobbyCreatedState value) lobbyCreated,
-    required TResult Function(GameRoomPlayerJoinedState value) playerJoined,
     required TResult Function(GameRoomErrorState value) error,
   }) =>
       throw _privateConstructorUsedError;
@@ -456,7 +681,6 @@ mixin _$GameroomState {
     TResult Function(GameRoomInitialState value)? initial,
     TResult Function(GameRoomLoadingState value)? loading,
     TResult Function(GameRoomLobbyCreatedState value)? lobbyCreated,
-    TResult Function(GameRoomPlayerJoinedState value)? playerJoined,
     TResult Function(GameRoomErrorState value)? error,
   }) =>
       throw _privateConstructorUsedError;
@@ -465,7 +689,6 @@ mixin _$GameroomState {
     TResult Function(GameRoomInitialState value)? initial,
     TResult Function(GameRoomLoadingState value)? loading,
     TResult Function(GameRoomLobbyCreatedState value)? lobbyCreated,
-    TResult Function(GameRoomPlayerJoinedState value)? playerJoined,
     TResult Function(GameRoomErrorState value)? error,
     required TResult orElse(),
   }) =>
@@ -540,8 +763,9 @@ class _$GameRoomInitialState
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(GameRoomModel gameRoomModel) lobbyCreated,
-    required TResult Function(GameRoomModel gameRoomModel) playerJoined,
+    required TResult Function(GameRoomModel gameRoomModel, bool isClosed,
+            PlayerStatus isPlayerOne)
+        lobbyCreated,
     required TResult Function(String errorTxt) error,
   }) {
     return initial();
@@ -552,8 +776,9 @@ class _$GameRoomInitialState
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(GameRoomModel gameRoomModel)? lobbyCreated,
-    TResult Function(GameRoomModel gameRoomModel)? playerJoined,
+    TResult Function(GameRoomModel gameRoomModel, bool isClosed,
+            PlayerStatus isPlayerOne)?
+        lobbyCreated,
     TResult Function(String errorTxt)? error,
   }) {
     return initial?.call();
@@ -564,8 +789,9 @@ class _$GameRoomInitialState
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(GameRoomModel gameRoomModel)? lobbyCreated,
-    TResult Function(GameRoomModel gameRoomModel)? playerJoined,
+    TResult Function(GameRoomModel gameRoomModel, bool isClosed,
+            PlayerStatus isPlayerOne)?
+        lobbyCreated,
     TResult Function(String errorTxt)? error,
     required TResult orElse(),
   }) {
@@ -581,7 +807,6 @@ class _$GameRoomInitialState
     required TResult Function(GameRoomInitialState value) initial,
     required TResult Function(GameRoomLoadingState value) loading,
     required TResult Function(GameRoomLobbyCreatedState value) lobbyCreated,
-    required TResult Function(GameRoomPlayerJoinedState value) playerJoined,
     required TResult Function(GameRoomErrorState value) error,
   }) {
     return initial(this);
@@ -593,7 +818,6 @@ class _$GameRoomInitialState
     TResult Function(GameRoomInitialState value)? initial,
     TResult Function(GameRoomLoadingState value)? loading,
     TResult Function(GameRoomLobbyCreatedState value)? lobbyCreated,
-    TResult Function(GameRoomPlayerJoinedState value)? playerJoined,
     TResult Function(GameRoomErrorState value)? error,
   }) {
     return initial?.call(this);
@@ -605,7 +829,6 @@ class _$GameRoomInitialState
     TResult Function(GameRoomInitialState value)? initial,
     TResult Function(GameRoomLoadingState value)? loading,
     TResult Function(GameRoomLobbyCreatedState value)? lobbyCreated,
-    TResult Function(GameRoomPlayerJoinedState value)? playerJoined,
     TResult Function(GameRoomErrorState value)? error,
     required TResult orElse(),
   }) {
@@ -671,8 +894,9 @@ class _$GameRoomLoadingState
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(GameRoomModel gameRoomModel) lobbyCreated,
-    required TResult Function(GameRoomModel gameRoomModel) playerJoined,
+    required TResult Function(GameRoomModel gameRoomModel, bool isClosed,
+            PlayerStatus isPlayerOne)
+        lobbyCreated,
     required TResult Function(String errorTxt) error,
   }) {
     return loading();
@@ -683,8 +907,9 @@ class _$GameRoomLoadingState
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(GameRoomModel gameRoomModel)? lobbyCreated,
-    TResult Function(GameRoomModel gameRoomModel)? playerJoined,
+    TResult Function(GameRoomModel gameRoomModel, bool isClosed,
+            PlayerStatus isPlayerOne)?
+        lobbyCreated,
     TResult Function(String errorTxt)? error,
   }) {
     return loading?.call();
@@ -695,8 +920,9 @@ class _$GameRoomLoadingState
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(GameRoomModel gameRoomModel)? lobbyCreated,
-    TResult Function(GameRoomModel gameRoomModel)? playerJoined,
+    TResult Function(GameRoomModel gameRoomModel, bool isClosed,
+            PlayerStatus isPlayerOne)?
+        lobbyCreated,
     TResult Function(String errorTxt)? error,
     required TResult orElse(),
   }) {
@@ -712,7 +938,6 @@ class _$GameRoomLoadingState
     required TResult Function(GameRoomInitialState value) initial,
     required TResult Function(GameRoomLoadingState value) loading,
     required TResult Function(GameRoomLobbyCreatedState value) lobbyCreated,
-    required TResult Function(GameRoomPlayerJoinedState value) playerJoined,
     required TResult Function(GameRoomErrorState value) error,
   }) {
     return loading(this);
@@ -724,7 +949,6 @@ class _$GameRoomLoadingState
     TResult Function(GameRoomInitialState value)? initial,
     TResult Function(GameRoomLoadingState value)? loading,
     TResult Function(GameRoomLobbyCreatedState value)? lobbyCreated,
-    TResult Function(GameRoomPlayerJoinedState value)? playerJoined,
     TResult Function(GameRoomErrorState value)? error,
   }) {
     return loading?.call(this);
@@ -736,7 +960,6 @@ class _$GameRoomLoadingState
     TResult Function(GameRoomInitialState value)? initial,
     TResult Function(GameRoomLoadingState value)? loading,
     TResult Function(GameRoomLobbyCreatedState value)? lobbyCreated,
-    TResult Function(GameRoomPlayerJoinedState value)? playerJoined,
     TResult Function(GameRoomErrorState value)? error,
     required TResult orElse(),
   }) {
@@ -756,9 +979,8 @@ abstract class $GameRoomLobbyCreatedStateCopyWith<$Res> {
   factory $GameRoomLobbyCreatedStateCopyWith(GameRoomLobbyCreatedState value,
           $Res Function(GameRoomLobbyCreatedState) then) =
       _$GameRoomLobbyCreatedStateCopyWithImpl<$Res>;
-  $Res call({GameRoomModel gameRoomModel});
-
-  $GameRoomModelCopyWith<$Res> get gameRoomModel;
+  $Res call(
+      {GameRoomModel gameRoomModel, bool isClosed, PlayerStatus isPlayerOne});
 }
 
 /// @nodoc
@@ -776,20 +998,23 @@ class _$GameRoomLobbyCreatedStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? gameRoomModel = freezed,
+    Object? isClosed = freezed,
+    Object? isPlayerOne = freezed,
   }) {
     return _then(GameRoomLobbyCreatedState(
       gameRoomModel: gameRoomModel == freezed
           ? _value.gameRoomModel
           : gameRoomModel // ignore: cast_nullable_to_non_nullable
               as GameRoomModel,
+      isClosed: isClosed == freezed
+          ? _value.isClosed
+          : isClosed // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isPlayerOne: isPlayerOne == freezed
+          ? _value.isPlayerOne
+          : isPlayerOne // ignore: cast_nullable_to_non_nullable
+              as PlayerStatus,
     ));
-  }
-
-  @override
-  $GameRoomModelCopyWith<$Res> get gameRoomModel {
-    return $GameRoomModelCopyWith<$Res>(_value.gameRoomModel, (value) {
-      return _then(_value.copyWith(gameRoomModel: value));
-    });
   }
 }
 
@@ -798,14 +1023,21 @@ class _$GameRoomLobbyCreatedStateCopyWithImpl<$Res>
 class _$GameRoomLobbyCreatedState
     with DiagnosticableTreeMixin
     implements GameRoomLobbyCreatedState {
-  const _$GameRoomLobbyCreatedState({required this.gameRoomModel});
+  const _$GameRoomLobbyCreatedState(
+      {required this.gameRoomModel,
+      required this.isClosed,
+      required this.isPlayerOne});
 
   @override
   final GameRoomModel gameRoomModel;
+  @override
+  final bool isClosed;
+  @override
+  final PlayerStatus isPlayerOne;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'GameroomState.lobbyCreated(gameRoomModel: $gameRoomModel)';
+    return 'GameroomState.lobbyCreated(gameRoomModel: $gameRoomModel, isClosed: $isClosed, isPlayerOne: $isPlayerOne)';
   }
 
   @override
@@ -813,7 +1045,9 @@ class _$GameRoomLobbyCreatedState
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'GameroomState.lobbyCreated'))
-      ..add(DiagnosticsProperty('gameRoomModel', gameRoomModel));
+      ..add(DiagnosticsProperty('gameRoomModel', gameRoomModel))
+      ..add(DiagnosticsProperty('isClosed', isClosed))
+      ..add(DiagnosticsProperty('isPlayerOne', isPlayerOne));
   }
 
   @override
@@ -822,12 +1056,18 @@ class _$GameRoomLobbyCreatedState
         (other.runtimeType == runtimeType &&
             other is GameRoomLobbyCreatedState &&
             const DeepCollectionEquality()
-                .equals(other.gameRoomModel, gameRoomModel));
+                .equals(other.gameRoomModel, gameRoomModel) &&
+            const DeepCollectionEquality().equals(other.isClosed, isClosed) &&
+            const DeepCollectionEquality()
+                .equals(other.isPlayerOne, isPlayerOne));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(gameRoomModel));
+      runtimeType,
+      const DeepCollectionEquality().hash(gameRoomModel),
+      const DeepCollectionEquality().hash(isClosed),
+      const DeepCollectionEquality().hash(isPlayerOne));
 
   @JsonKey(ignore: true)
   @override
@@ -840,11 +1080,12 @@ class _$GameRoomLobbyCreatedState
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(GameRoomModel gameRoomModel) lobbyCreated,
-    required TResult Function(GameRoomModel gameRoomModel) playerJoined,
+    required TResult Function(GameRoomModel gameRoomModel, bool isClosed,
+            PlayerStatus isPlayerOne)
+        lobbyCreated,
     required TResult Function(String errorTxt) error,
   }) {
-    return lobbyCreated(gameRoomModel);
+    return lobbyCreated(gameRoomModel, isClosed, isPlayerOne);
   }
 
   @override
@@ -852,11 +1093,12 @@ class _$GameRoomLobbyCreatedState
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(GameRoomModel gameRoomModel)? lobbyCreated,
-    TResult Function(GameRoomModel gameRoomModel)? playerJoined,
+    TResult Function(GameRoomModel gameRoomModel, bool isClosed,
+            PlayerStatus isPlayerOne)?
+        lobbyCreated,
     TResult Function(String errorTxt)? error,
   }) {
-    return lobbyCreated?.call(gameRoomModel);
+    return lobbyCreated?.call(gameRoomModel, isClosed, isPlayerOne);
   }
 
   @override
@@ -864,13 +1106,14 @@ class _$GameRoomLobbyCreatedState
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(GameRoomModel gameRoomModel)? lobbyCreated,
-    TResult Function(GameRoomModel gameRoomModel)? playerJoined,
+    TResult Function(GameRoomModel gameRoomModel, bool isClosed,
+            PlayerStatus isPlayerOne)?
+        lobbyCreated,
     TResult Function(String errorTxt)? error,
     required TResult orElse(),
   }) {
     if (lobbyCreated != null) {
-      return lobbyCreated(gameRoomModel);
+      return lobbyCreated(gameRoomModel, isClosed, isPlayerOne);
     }
     return orElse();
   }
@@ -881,7 +1124,6 @@ class _$GameRoomLobbyCreatedState
     required TResult Function(GameRoomInitialState value) initial,
     required TResult Function(GameRoomLoadingState value) loading,
     required TResult Function(GameRoomLobbyCreatedState value) lobbyCreated,
-    required TResult Function(GameRoomPlayerJoinedState value) playerJoined,
     required TResult Function(GameRoomErrorState value) error,
   }) {
     return lobbyCreated(this);
@@ -893,7 +1135,6 @@ class _$GameRoomLobbyCreatedState
     TResult Function(GameRoomInitialState value)? initial,
     TResult Function(GameRoomLoadingState value)? loading,
     TResult Function(GameRoomLobbyCreatedState value)? lobbyCreated,
-    TResult Function(GameRoomPlayerJoinedState value)? playerJoined,
     TResult Function(GameRoomErrorState value)? error,
   }) {
     return lobbyCreated?.call(this);
@@ -905,7 +1146,6 @@ class _$GameRoomLobbyCreatedState
     TResult Function(GameRoomInitialState value)? initial,
     TResult Function(GameRoomLoadingState value)? loading,
     TResult Function(GameRoomLobbyCreatedState value)? lobbyCreated,
-    TResult Function(GameRoomPlayerJoinedState value)? playerJoined,
     TResult Function(GameRoomErrorState value)? error,
     required TResult orElse(),
   }) {
@@ -918,186 +1158,15 @@ class _$GameRoomLobbyCreatedState
 
 abstract class GameRoomLobbyCreatedState implements GameroomState {
   const factory GameRoomLobbyCreatedState(
-      {required GameRoomModel gameRoomModel}) = _$GameRoomLobbyCreatedState;
+      {required GameRoomModel gameRoomModel,
+      required bool isClosed,
+      required PlayerStatus isPlayerOne}) = _$GameRoomLobbyCreatedState;
 
   GameRoomModel get gameRoomModel;
+  bool get isClosed;
+  PlayerStatus get isPlayerOne;
   @JsonKey(ignore: true)
   $GameRoomLobbyCreatedStateCopyWith<GameRoomLobbyCreatedState> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $GameRoomPlayerJoinedStateCopyWith<$Res> {
-  factory $GameRoomPlayerJoinedStateCopyWith(GameRoomPlayerJoinedState value,
-          $Res Function(GameRoomPlayerJoinedState) then) =
-      _$GameRoomPlayerJoinedStateCopyWithImpl<$Res>;
-  $Res call({GameRoomModel gameRoomModel});
-
-  $GameRoomModelCopyWith<$Res> get gameRoomModel;
-}
-
-/// @nodoc
-class _$GameRoomPlayerJoinedStateCopyWithImpl<$Res>
-    extends _$GameroomStateCopyWithImpl<$Res>
-    implements $GameRoomPlayerJoinedStateCopyWith<$Res> {
-  _$GameRoomPlayerJoinedStateCopyWithImpl(GameRoomPlayerJoinedState _value,
-      $Res Function(GameRoomPlayerJoinedState) _then)
-      : super(_value, (v) => _then(v as GameRoomPlayerJoinedState));
-
-  @override
-  GameRoomPlayerJoinedState get _value =>
-      super._value as GameRoomPlayerJoinedState;
-
-  @override
-  $Res call({
-    Object? gameRoomModel = freezed,
-  }) {
-    return _then(GameRoomPlayerJoinedState(
-      gameRoomModel: gameRoomModel == freezed
-          ? _value.gameRoomModel
-          : gameRoomModel // ignore: cast_nullable_to_non_nullable
-              as GameRoomModel,
-    ));
-  }
-
-  @override
-  $GameRoomModelCopyWith<$Res> get gameRoomModel {
-    return $GameRoomModelCopyWith<$Res>(_value.gameRoomModel, (value) {
-      return _then(_value.copyWith(gameRoomModel: value));
-    });
-  }
-}
-
-/// @nodoc
-
-class _$GameRoomPlayerJoinedState
-    with DiagnosticableTreeMixin
-    implements GameRoomPlayerJoinedState {
-  const _$GameRoomPlayerJoinedState({required this.gameRoomModel});
-
-  @override
-  final GameRoomModel gameRoomModel;
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'GameroomState.playerJoined(gameRoomModel: $gameRoomModel)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'GameroomState.playerJoined'))
-      ..add(DiagnosticsProperty('gameRoomModel', gameRoomModel));
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is GameRoomPlayerJoinedState &&
-            const DeepCollectionEquality()
-                .equals(other.gameRoomModel, gameRoomModel));
-  }
-
-  @override
-  int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(gameRoomModel));
-
-  @JsonKey(ignore: true)
-  @override
-  $GameRoomPlayerJoinedStateCopyWith<GameRoomPlayerJoinedState> get copyWith =>
-      _$GameRoomPlayerJoinedStateCopyWithImpl<GameRoomPlayerJoinedState>(
-          this, _$identity);
-
-  @override
-  @optionalTypeArgs
-  TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(GameRoomModel gameRoomModel) lobbyCreated,
-    required TResult Function(GameRoomModel gameRoomModel) playerJoined,
-    required TResult Function(String errorTxt) error,
-  }) {
-    return playerJoined(gameRoomModel);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(GameRoomModel gameRoomModel)? lobbyCreated,
-    TResult Function(GameRoomModel gameRoomModel)? playerJoined,
-    TResult Function(String errorTxt)? error,
-  }) {
-    return playerJoined?.call(gameRoomModel);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(GameRoomModel gameRoomModel)? lobbyCreated,
-    TResult Function(GameRoomModel gameRoomModel)? playerJoined,
-    TResult Function(String errorTxt)? error,
-    required TResult orElse(),
-  }) {
-    if (playerJoined != null) {
-      return playerJoined(gameRoomModel);
-    }
-    return orElse();
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult map<TResult extends Object?>({
-    required TResult Function(GameRoomInitialState value) initial,
-    required TResult Function(GameRoomLoadingState value) loading,
-    required TResult Function(GameRoomLobbyCreatedState value) lobbyCreated,
-    required TResult Function(GameRoomPlayerJoinedState value) playerJoined,
-    required TResult Function(GameRoomErrorState value) error,
-  }) {
-    return playerJoined(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(GameRoomInitialState value)? initial,
-    TResult Function(GameRoomLoadingState value)? loading,
-    TResult Function(GameRoomLobbyCreatedState value)? lobbyCreated,
-    TResult Function(GameRoomPlayerJoinedState value)? playerJoined,
-    TResult Function(GameRoomErrorState value)? error,
-  }) {
-    return playerJoined?.call(this);
-  }
-
-  @override
-  @optionalTypeArgs
-  TResult maybeMap<TResult extends Object?>({
-    TResult Function(GameRoomInitialState value)? initial,
-    TResult Function(GameRoomLoadingState value)? loading,
-    TResult Function(GameRoomLobbyCreatedState value)? lobbyCreated,
-    TResult Function(GameRoomPlayerJoinedState value)? playerJoined,
-    TResult Function(GameRoomErrorState value)? error,
-    required TResult orElse(),
-  }) {
-    if (playerJoined != null) {
-      return playerJoined(this);
-    }
-    return orElse();
-  }
-}
-
-abstract class GameRoomPlayerJoinedState implements GameroomState {
-  const factory GameRoomPlayerJoinedState(
-      {required GameRoomModel gameRoomModel}) = _$GameRoomPlayerJoinedState;
-
-  GameRoomModel get gameRoomModel;
-  @JsonKey(ignore: true)
-  $GameRoomPlayerJoinedStateCopyWith<GameRoomPlayerJoinedState> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -1178,8 +1247,9 @@ class _$GameRoomErrorState
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(GameRoomModel gameRoomModel) lobbyCreated,
-    required TResult Function(GameRoomModel gameRoomModel) playerJoined,
+    required TResult Function(GameRoomModel gameRoomModel, bool isClosed,
+            PlayerStatus isPlayerOne)
+        lobbyCreated,
     required TResult Function(String errorTxt) error,
   }) {
     return error(errorTxt);
@@ -1190,8 +1260,9 @@ class _$GameRoomErrorState
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(GameRoomModel gameRoomModel)? lobbyCreated,
-    TResult Function(GameRoomModel gameRoomModel)? playerJoined,
+    TResult Function(GameRoomModel gameRoomModel, bool isClosed,
+            PlayerStatus isPlayerOne)?
+        lobbyCreated,
     TResult Function(String errorTxt)? error,
   }) {
     return error?.call(errorTxt);
@@ -1202,8 +1273,9 @@ class _$GameRoomErrorState
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(GameRoomModel gameRoomModel)? lobbyCreated,
-    TResult Function(GameRoomModel gameRoomModel)? playerJoined,
+    TResult Function(GameRoomModel gameRoomModel, bool isClosed,
+            PlayerStatus isPlayerOne)?
+        lobbyCreated,
     TResult Function(String errorTxt)? error,
     required TResult orElse(),
   }) {
@@ -1219,7 +1291,6 @@ class _$GameRoomErrorState
     required TResult Function(GameRoomInitialState value) initial,
     required TResult Function(GameRoomLoadingState value) loading,
     required TResult Function(GameRoomLobbyCreatedState value) lobbyCreated,
-    required TResult Function(GameRoomPlayerJoinedState value) playerJoined,
     required TResult Function(GameRoomErrorState value) error,
   }) {
     return error(this);
@@ -1231,7 +1302,6 @@ class _$GameRoomErrorState
     TResult Function(GameRoomInitialState value)? initial,
     TResult Function(GameRoomLoadingState value)? loading,
     TResult Function(GameRoomLobbyCreatedState value)? lobbyCreated,
-    TResult Function(GameRoomPlayerJoinedState value)? playerJoined,
     TResult Function(GameRoomErrorState value)? error,
   }) {
     return error?.call(this);
@@ -1243,7 +1313,6 @@ class _$GameRoomErrorState
     TResult Function(GameRoomInitialState value)? initial,
     TResult Function(GameRoomLoadingState value)? loading,
     TResult Function(GameRoomLobbyCreatedState value)? lobbyCreated,
-    TResult Function(GameRoomPlayerJoinedState value)? playerJoined,
     TResult Function(GameRoomErrorState value)? error,
     required TResult orElse(),
   }) {

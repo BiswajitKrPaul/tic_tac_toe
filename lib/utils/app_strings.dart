@@ -5,7 +5,9 @@ class AppStrings {
   static const String joinRoom = 'Join Lobby';
   static const String createRoom = 'Create Lobby';
   static const String enterName = 'Enter your name';
+  static const String enterRoomCode = 'Enter your room code';
   static const String apiFailed = 'Api Request Failed';
+  static const String wrongRoomCode = 'You have entered a wrong room id';
 
   // Parse Class Names
   static const String gameRoom = 'GameRoom';
