@@ -1,35 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tic_tac_toe/blocs/gameRoombloc/gameroom_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tic_tac_toe/providers/game_room_provider/game_room_notifier.dart';
 import 'package:tic_tac_toe/utils/app_strings.dart';
 
-class LobbyRoom extends StatefulWidget {
-  static const String routeName = 'lobbyroom';
+class LobbyRoom extends ConsumerWidget {
   const LobbyRoom({Key? key}) : super(key: key);
+  static const String routeName = 'lobbyroom';
 
   @override
-  State<LobbyRoom> createState() => _LobbyRoomState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final gameRoom = ref.watch(gameRoomProvider).gameRoomModel;
 
-class _LobbyRoomState extends State<LobbyRoom> {
-  late GameRoomLobbyCreatedState vState;
-
-  @override
-  void initState() {
-    super.initState();
-    vState = BlocProvider.of<GameroomBloc>(context).state
-        as GameRoomLobbyCreatedState;
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(AppStrings.gameRoom),
+        title: const Text('Game Room'),
         centerTitle: true,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
@@ -39,15 +27,15 @@ class _LobbyRoomState extends State<LobbyRoom> {
                   Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        FittedBox(
+                        Flexible(
                           child: Text(
-                            vState.gameRoomModel.playerOne,
+                            gameRoom.playerOneName,
                             style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Theme.of(context).colorScheme.primary),
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
                           ),
                         ),
                         Icon(
@@ -61,28 +49,17 @@ class _LobbyRoomState extends State<LobbyRoom> {
                   Expanded(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        BlocBuilder<GameroomBloc, GameroomState>(
-                          builder: (context, state) {
-                            if (state is GameRoomLobbyCreatedState) {
-                              return FittedBox(
-                                child: Text(
-                                  state.gameRoomModel.playerTwo.isEmpty
-                                      ? 'Waiting for 2nd Player... '
-                                      : state.gameRoomModel.playerTwo,
-                                  style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .primary),
-                                ),
-                              );
-                            } else {
-                              return const SizedBox();
-                            }
-                          },
+                        Flexible(
+                          child: Text(
+                            gameRoom.playerTwoName ??
+                                'Waiting for 2nd Player... ',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+                          ),
                         ),
                         Icon(
                           Icons.exposure_zero,
@@ -107,12 +84,13 @@ class _LobbyRoomState extends State<LobbyRoom> {
                     Expanded(
                       flex: 8,
                       child: Text(
-                        vState.gameRoomModel.objectId,
+                        gameRoom.roomCode,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 32,
                           fontWeight: FontWeight.bold,
                           color: Theme.of(context).colorScheme.primary,
+                          letterSpacing: 4,
                         ),
                       ),
                     ),
@@ -121,7 +99,7 @@ class _LobbyRoomState extends State<LobbyRoom> {
                       child: IconButton(
                         onPressed: () {},
                         icon: Icon(
-                          (Icons.copy),
+                          Icons.copy,
                           color: Theme.of(context).colorScheme.primary,
                         ),
                       ),
@@ -131,20 +109,20 @@ class _LobbyRoomState extends State<LobbyRoom> {
               ),
             ),
             Flexible(
-              child: BlocBuilder<GameroomBloc, GameroomState>(
-                builder: (context, state) {
-                  return ElevatedButton(
-                    onPressed: (state as GameRoomLobbyCreatedState)
-                            .gameRoomModel
-                            .playerTwo
-                            .isEmpty
-                        ? null
-                        : () {},
-                    child: const Text(AppStrings.joinRoom),
-                  );
-                },
+              child: ElevatedButton(
+                onPressed: () {},
+                child: const Text(AppStrings.joinRoom),
               ),
-            )
+            ),
+            Flexible(
+              child: ElevatedButton(
+                onPressed: () {
+                  ref.read(gameRoomProvider.notifier).leaveLobby();
+                  Navigator.pop(context);
+                },
+                child: const Text(AppStrings.leaveRoom),
+              ),
+            ),
           ],
         ),
       ),

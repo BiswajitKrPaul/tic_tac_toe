@@ -2,11 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tic_tac_toe/utils/app_strings.dart';
 
 class JoinLobbyDialog extends StatelessWidget {
-  final TextEditingController nameController;
-  final TextEditingController roomIdController;
-  final Function(String playerName, String roomId) onTap;
-  final bool isLoading;
-
   const JoinLobbyDialog({
     Key? key,
     required this.nameController,
@@ -15,14 +10,17 @@ class JoinLobbyDialog extends StatelessWidget {
     required this.isLoading,
   }) : super(key: key);
 
+  final TextEditingController nameController;
+  final TextEditingController roomIdController;
+  final Function(String playerName, String roomId) onTap;
+  final bool isLoading;
   @override
   Widget build(BuildContext context) {
     return Dialog(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             TextField(

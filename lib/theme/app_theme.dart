@@ -13,7 +13,7 @@ ThemeData basicTheme() {
         color: kOnPrimary,
         fontWeight: FontWeight.bold,
         fontSize: 28,
-        letterSpacing: 2.0,
+        letterSpacing: 2,
       ),
       bodyText1: base.bodyText1!.copyWith(
         color: kOnPrimary,
@@ -53,14 +53,14 @@ ThemeData basicTheme() {
     );
   }
 
-  final ThemeData base = ThemeData();
+  final base = ThemeData();
 
   return base.copyWith(
     primaryTextTheme: _basicTextTheme(base.textTheme),
     scaffoldBackgroundColor: kOnPrimary,
     iconTheme: const IconThemeData(
       color: Colors.white,
-      size: 20.0,
+      size: 20,
     ),
     backgroundColor: Colors.white,
     elevatedButtonTheme: ElevatedButtonThemeData(

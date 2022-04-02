@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:tic_tac_toe/utils/app_strings.dart';
 
 class InputDialog extends StatelessWidget {
-  final TextEditingController controller;
-  final ValueChanged<String> onTap;
-  final bool isLoading;
-
   const InputDialog({
     Key? key,
     required this.controller,
@@ -13,14 +9,16 @@ class InputDialog extends StatelessWidget {
     required this.isLoading,
   }) : super(key: key);
 
+  final TextEditingController controller;
+  final ValueChanged<String> onTap;
+  final bool isLoading;
   @override
   Widget build(BuildContext context) {
     return Dialog(
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             TextField(

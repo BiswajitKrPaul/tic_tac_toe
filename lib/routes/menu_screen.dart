@@ -1,22 +1,26 @@
+// ignore_for_file: lines_longer_than_80_chars
+
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:lottie/lottie.dart';
-import 'package:tic_tac_toe/blocs/gameRoombloc/gameroom_bloc.dart';
+import 'package:tic_tac_toe/providers/game_room_provider/game_room_notifier.dart';
+import 'package:tic_tac_toe/providers/game_room_provider/game_room_states.dart';
 import 'package:tic_tac_toe/routes/lobby_room.dart';
 import 'package:tic_tac_toe/utils/app_strings.dart';
 import 'package:tic_tac_toe/utils/image_utils.dart';
+import 'package:tic_tac_toe/utils/utils_function.dart';
 import 'package:tic_tac_toe/widgets/app_text_button.dart';
 import 'package:tic_tac_toe/widgets/input_dialog.dart';
 import 'package:tic_tac_toe/widgets/join_lobby_dialog.dart';
 
-class MenuHome extends StatefulWidget {
+class MenuHome extends ConsumerStatefulWidget {
   const MenuHome({Key? key}) : super(key: key);
 
   @override
-  State<MenuHome> createState() => _MenuHomeState();
+  ConsumerState<MenuHome> createState() => _MenuHomeState();
 }
 
-class _MenuHomeState extends State<MenuHome> {
+class _MenuHomeState extends ConsumerState<MenuHome> {
   late TextEditingController controller;
   late TextEditingController nameController;
   late TextEditingController roomIdController;
@@ -39,11 +43,90 @@ class _MenuHomeState extends State<MenuHome> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(
+      gameRoomProvider,
+      (GameRoomStates? previous, GameRoomStates next) {
+        if (next.status == const GameRoomStatus.created()) {
+          if (next.gameRoomModel.playerTwo == null) {
+            Utils.showToast(context, 'Lobby Created');
+            controller.clear();
+            nameController.clear();
+            roomIdController.clear();
+            Navigator.pop(context);
+            Navigator.pushNamed(context, LobbyRoom.routeName);
+          } else {
+            Utils.showToast(
+              context,
+              '${next.gameRoomModel.playerTwoName} has Joined',
+            );
+          }
+        }
+        if (next.status == const GameRoomStatus.lobbyJoined()) {
+          controller.clear();
+          nameController.clear();
+          roomIdController.clear();
+          Navigator.pop(context);
+          Navigator.pushNamed(context, LobbyRoom.routeName);
+        }
+        if (next.status == const GameRoomStatus.error()) {
+          Utils.showToast(context, next.errorText);
+        }
+        if (previous != null &&
+            previous.gameRoomModel.playerTwo != null &&
+            next.gameRoomModel.playerTwo == null &&
+            previous.gameRoomModel.status == 'full') {
+          Utils.showToast(
+            context,
+            '${previous.gameRoomModel.playerTwoName} has left',
+          );
+        }
+        if (previous != null &&
+            previous.gameRoomModel.playerTwo == null &&
+            next.gameRoomModel.playerTwo != null &&
+            previous.gameRoomModel.status == 'playerleft') {
+          Utils.showToast(
+            context,
+            '${next.gameRoomModel.playerTwoName} has joined',
+          );
+        }
+        if (next.status == const GameRoomStatus.lobbyClosed()) {
+          Navigator.pop(context);
+          showDialog<void>(
+            context: context,
+            builder: (ctx) => Dialog(
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height * 0.1,
+                width: MediaQuery.of(context).size.height * 0.7,
+                child: Column(
+                  children: [
+                    Flexible(
+                      child: Center(
+                        child: Text(
+                          '${previous!.gameRoomModel.playerOneName} has closed the lobby',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => Navigator.pop(ctx),
+                      child: const Text('Ok'),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
+      },
+    );
+
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(8),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Expanded(
@@ -54,7 +137,6 @@ class _MenuHomeState extends State<MenuHome> {
             ),
             Expanded(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   AppTextButton(
@@ -62,50 +144,19 @@ class _MenuHomeState extends State<MenuHome> {
                     label: AppStrings.singlePlayer,
                   ),
                   AppTextButton(
-                    onTap: () => showDialog(
+                    onTap: () => showDialog<void>(
                       context: context,
-                      builder: (ctx) =>
-                          BlocConsumer<GameroomBloc, GameroomState>(
-                        listener: (context, state) {
-                          if (state is GameRoomLobbyCreatedState) {
-                            controller.clear();
-                            nameController.clear();
-                            roomIdController.clear();
-                            Navigator.pop(context);
-                            Navigator.pushNamed(ctx, LobbyRoom.routeName);
-                          }
-                          if (state is GameRoomErrorState) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(AppStrings.apiFailed),
-                              ),
-                            );
-                          }
-                        },
-                        builder: (context, state) {
-                          return state.maybeWhen(
-                            loading: () => InputDialog(
-                              isLoading: true,
-                              onTap: (playerName) {
-                                context.read<GameroomBloc>().add(
-                                      GameroomEvent.createLobby(
-                                        playerOne: playerName,
-                                      ),
-                                    );
-                              },
-                              controller: controller,
-                            ),
-                            orElse: () => InputDialog(
-                              isLoading: false,
-                              onTap: (playerName) {
-                                context.read<GameroomBloc>().add(
-                                      GameroomEvent.createLobby(
-                                        playerOne: playerName,
-                                      ),
-                                    );
-                              },
-                              controller: controller,
-                            ),
+                      builder: (ctx) => Consumer(
+                        builder: (context, r, child) {
+                          return InputDialog(
+                            isLoading: r.watch(gameRoomProvider).status ==
+                                const GameRoomStatus.loading(),
+                            onTap: (playerName) {
+                              ref
+                                  .read(gameRoomProvider.notifier)
+                                  .createLobby(playerName);
+                            },
+                            controller: controller,
                           );
                         },
                       ),
@@ -113,54 +164,20 @@ class _MenuHomeState extends State<MenuHome> {
                     label: AppStrings.createRoom,
                   ),
                   AppTextButton(
-                    onTap: () => showDialog(
+                    onTap: () => showDialog<void>(
                       context: context,
-                      builder: (ctx) =>
-                          BlocConsumer<GameroomBloc, GameroomState>(
-                        listener: (context, state) {
-                          if (state is GameRoomLobbyCreatedState) {
-                            controller.clear();
-                            nameController.clear();
-                            roomIdController.clear();
-                            Navigator.pop(context);
-                            Navigator.pushNamed(ctx, LobbyRoom.routeName);
-                          }
-                          if (state is GameRoomErrorState) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(state.errorTxt),
-                              ),
-                            );
-                          }
-                        },
-                        builder: (context, state) {
-                          return state.maybeWhen(
-                            loading: () => JoinLobbyDialog(
-                              isLoading: true,
-                              nameController: nameController,
-                              roomIdController: roomIdController,
-                              onTap: (playerName, roomCode) {
-                                context.read<GameroomBloc>().add(
-                                      GameroomEvent.joinLobby(
-                                        roomCode: roomCode,
-                                        playerTwo: playerName,
-                                      ),
-                                    );
-                              },
-                            ),
-                            orElse: () => JoinLobbyDialog(
-                              isLoading: false,
-                              nameController: nameController,
-                              roomIdController: roomIdController,
-                              onTap: (playerName, roomCode) {
-                                context.read<GameroomBloc>().add(
-                                      GameroomEvent.joinLobby(
-                                        roomCode: roomCode,
-                                        playerTwo: playerName,
-                                      ),
-                                    );
-                              },
-                            ),
+                      builder: (ctx) => Consumer(
+                        builder: (context, state, child) {
+                          return JoinLobbyDialog(
+                            isLoading: state.watch(gameRoomProvider).status ==
+                                const GameRoomStatus.loading(),
+                            nameController: nameController,
+                            roomIdController: roomIdController,
+                            onTap: (playerName, roomCode) {
+                              ref
+                                  .read(gameRoomProvider.notifier)
+                                  .joinLobby(playerName, roomCode);
+                            },
                           );
                         },
                       ),

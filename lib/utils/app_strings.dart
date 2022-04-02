@@ -8,7 +8,9 @@ class AppStrings {
   static const String enterRoomCode = 'Enter your room code';
   static const String apiFailed = 'Api Request Failed';
   static const String wrongRoomCode = 'You have entered a wrong room id';
+  static const String leaveRoom = 'Leave Room';
+  static const String arcadeFontStyle = 'ArcadeClassic';
 
   // Parse Class Names
-  static const String gameRoom = 'GameRoom';
+  static const String uniqueID = 'unique()';
 }
