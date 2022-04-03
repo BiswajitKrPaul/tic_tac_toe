@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:appwrite/appwrite.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tic_tac_toe/models/game_room/game_room_model.dart';
+import 'package:tic_tac_toe/providers/game_moves_provider/game_moves_notifier.dart';
 import 'package:tic_tac_toe/providers/game_room_provider/game_room_states.dart';
 import 'package:tic_tac_toe/providers/service_provider/appwrite_services.dart';
 import 'package:tic_tac_toe/utils/api_constants.dart';
@@ -17,57 +18,56 @@ final gameRoomProvider =
 
 class GameRoomNotifier extends StateNotifier<GameRoomStates> {
   GameRoomNotifier(this.read) : super(GameRoomStates.initial()) {
-    _streamSubscription = read(appwriteRealtimeProvider)
-        .subscribe(
-          ['collections.${ApiConstants.gamelobbyCollectionId}.documents'],
-        )
-        .stream
-        .listen(
-          (newData) {
-            if (state.gameRoomModel.id.isNotEmpty) {
-              if (newData.event == 'database.documents.update') {
-                log(state.gameRoomModel.id);
-                log(GameRoomModel.fromJson(newData.payload).id);
-                if (state.gameRoomModel.id ==
-                    GameRoomModel.fromJson(newData.payload).id) {
-                  final newGameRoom = GameRoomModel.fromJson(newData.payload);
-                  if (newGameRoom.playerTwo != null &&
-                      newGameRoom.status == 'full') {
-                    state = state.copyWith(
-                      gameRoomModel: state.gameRoomModel.copyWith(
-                        playerTwo: newGameRoom.playerTwo,
-                        playerTwoName: newGameRoom.playerTwoName,
-                        status: newGameRoom.status,
-                      ),
-                    );
-                  } else if (newGameRoom.playerTwo == null &&
-                      newGameRoom.status == 'playerleft') {
-                    state = state.copyWith(
-                      gameRoomModel: state.gameRoomModel.copyWith(
-                        playerTwo: null,
-                        playerTwoName: null,
-                        status: newGameRoom.status,
-                      ),
-                      status: const GameRoomStatus.playerLeft(),
-                    );
-                  }
-                }
-              }
-              if (newData.event == 'database.documents.delete') {
-                if (state.gameRoomModel.id ==
-                    GameRoomModel.fromJson(newData.payload).id) {
-                  if (state.gameRoomModel.playerTwo ==
-                      read(appwriteUserProvider)?.$id) {
-                    state = state.copyWith(
-                      status: const GameRoomStatus.lobbyClosed(),
-                      gameRoomModel: GameRoomModel.initial(),
-                    );
-                  }
+    _streamSubscription = read(appwriteRealtimeProvider).stream.listen(
+      (newData) {
+        final collectionId = newData.payload[r'$collection'] as String;
+        if (collectionId == ApiConstants.gamelobbyCollectionId) {
+          if (state.gameRoomModel.id.isNotEmpty) {
+            if (newData.event == 'database.documents.update') {
+              if (state.gameRoomModel.id ==
+                  GameRoomModel.fromJson(newData.payload).id) {
+                final newGameRoom = GameRoomModel.fromJson(newData.payload);
+                if (newGameRoom.playerTwo != null &&
+                    newGameRoom.status == 'full') {
+                  state = state.copyWith(
+                    gameRoomModel: state.gameRoomModel.copyWith(
+                      playerTwo: newGameRoom.playerTwo,
+                      playerTwoName: newGameRoom.playerTwoName,
+                      status: newGameRoom.status,
+                      hasGameStarted: newGameRoom.hasGameStarted,
+                    ),
+                  );
+                } else if (newGameRoom.playerTwo == null &&
+                    newGameRoom.status == 'playerleft') {
+                  state = state.copyWith(
+                    gameRoomModel: state.gameRoomModel.copyWith(
+                      playerTwo: null,
+                      playerTwoName: null,
+                      status: newGameRoom.status,
+                    ),
+                    status: const GameRoomStatus.playerLeft(),
+                  );
                 }
               }
             }
-          },
-        );
+            if (newData.event == 'database.documents.delete') {
+              if (state.gameRoomModel.id ==
+                  GameRoomModel.fromJson(newData.payload).id) {
+                if (state.gameRoomModel.playerTwo ==
+                    read(appwriteUserProvider)?.$id) {
+                  state = state.copyWith(
+                    status: state.gameRoomModel.hasGameStarted
+                        ? state.status
+                        : const GameRoomStatus.lobbyClosed(),
+                    gameRoomModel: GameRoomModel.initial(),
+                  );
+                }
+              }
+            }
+          }
+        }
+      },
+    );
   }
   final Reader read;
   late StreamSubscription _streamSubscription;
@@ -103,6 +103,7 @@ class GameRoomNotifier extends StateNotifier<GameRoomStates> {
   //* Join Lobby Function
   Future<void> joinLobby(String playerName, String roomCode) async {
     try {
+      state = state.copyWith(status: const GameRoomStatus.loading());
       final currentUserId = read(appwriteUserProvider)!.$id;
       final document = await read(appwriteDataBaseProvider).listDocuments(
         collectionId: ApiConstants.gamelobbyCollectionId,
@@ -165,6 +166,22 @@ class GameRoomNotifier extends StateNotifier<GameRoomStates> {
         status: const GameRoomStatus.error(),
         errorText: e.message!,
       );
+    }
+  }
+
+  //*Start Game
+  Future<void> startGame() async {
+    if (state.gameRoomModel.playerTwo != null &&
+        state.gameRoomModel.playerTwoName!.isNotEmpty) {
+      await read(appwriteDataBaseProvider).updateDocument(
+        collectionId: ApiConstants.gamelobbyCollectionId,
+        documentId: state.gameRoomModel.id,
+        data: <String, dynamic>{'hasGameStarted': true},
+      );
+
+      await read(gameMovesProvider.notifier).createGame();
+    } else {
+      return;
     }
   }
 

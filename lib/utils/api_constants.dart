@@ -7,4 +7,6 @@ class ApiConstants {
   static String projectEndPoint = dotenv.get('APPWRITE_API_ENDPOINT');
   static String gamelobbyCollectionId =
       dotenv.get('APPWRITE_GAMELOBBY_COLLECTION_ID');
+  static String gameMovesCollectionId =
+      dotenv.get('APPWRITE_GAMEMOVES_COLLECTION_ID');
 }

@@ -54,7 +54,7 @@ class _MenuHomeState extends ConsumerState<MenuHome> {
             roomIdController.clear();
             Navigator.pop(context);
             Navigator.pushNamed(context, LobbyRoom.routeName);
-          } else {
+          } else if (!next.gameRoomModel.hasGameStarted) {
             Utils.showToast(
               context,
               '${next.gameRoomModel.playerTwoName} has Joined',
@@ -83,7 +83,8 @@ class _MenuHomeState extends ConsumerState<MenuHome> {
         if (previous != null &&
             previous.gameRoomModel.playerTwo == null &&
             next.gameRoomModel.playerTwo != null &&
-            previous.gameRoomModel.status == 'playerleft') {
+            previous.gameRoomModel.status == 'playerleft' &&
+            !next.gameRoomModel.hasGameStarted) {
           Utils.showToast(
             context,
             '${next.gameRoomModel.playerTwoName} has joined',
@@ -139,10 +140,6 @@ class _MenuHomeState extends ConsumerState<MenuHome> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  AppTextButton(
-                    onTap: () {},
-                    label: AppStrings.singlePlayer,
-                  ),
                   AppTextButton(
                     onTap: () => showDialog<void>(
                       context: context,

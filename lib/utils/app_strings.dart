@@ -10,6 +10,7 @@ class AppStrings {
   static const String wrongRoomCode = 'You have entered a wrong room id';
   static const String leaveRoom = 'Leave Room';
   static const String arcadeFontStyle = 'ArcadeClassic';
+  static const String startGame = 'Start Game';
 
   // Parse Class Names
   static const String uniqueID = 'unique()';

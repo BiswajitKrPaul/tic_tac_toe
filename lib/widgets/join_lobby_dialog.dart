@@ -71,7 +71,7 @@ class JoinLobbyDialog extends StatelessWidget {
                     ? CircularProgressIndicator(
                         color: Theme.of(context).colorScheme.onPrimary,
                       )
-                    : const Text(AppStrings.createRoom),
+                    : const Text(AppStrings.joinRoom),
               ),
             )
           ],

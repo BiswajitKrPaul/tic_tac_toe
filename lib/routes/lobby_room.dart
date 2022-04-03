@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tic_tac_toe/providers/game_room_provider/game_room_notifier.dart';
+import 'package:tic_tac_toe/providers/game_room_provider/game_room_states.dart';
+import 'package:tic_tac_toe/routes/game_screen.dart';
 import 'package:tic_tac_toe/utils/app_strings.dart';
 
 class LobbyRoom extends ConsumerWidget {
@@ -10,6 +12,15 @@ class LobbyRoom extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gameRoom = ref.watch(gameRoomProvider).gameRoomModel;
+
+    ref.listen(
+      gameRoomProvider,
+      (GameRoomStates? previous, GameRoomStates next) {
+        if (previous != null && next.gameRoomModel.hasGameStarted) {
+          Navigator.pushReplacementNamed(context, GameScreen.routeName);
+        }
+      },
+    );
 
     return Scaffold(
       appBar: AppBar(
@@ -110,8 +121,12 @@ class LobbyRoom extends ConsumerWidget {
             ),
             Flexible(
               child: ElevatedButton(
-                onPressed: () {},
-                child: const Text(AppStrings.joinRoom),
+                onPressed: gameRoom.playerTwo == null
+                    ? null
+                    : () {
+                        ref.read(gameRoomProvider.notifier).startGame();
+                      },
+                child: const Text(AppStrings.startGame),
               ),
             ),
             Flexible(

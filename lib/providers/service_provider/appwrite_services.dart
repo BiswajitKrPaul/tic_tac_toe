@@ -21,6 +21,9 @@ final appwriteDataBaseProvider = Provider<Database>((ref) {
   return Database(ref.read(appwriteClientProvider));
 });
 
-final appwriteRealtimeProvider = Provider<Realtime>((ref) {
-  return Realtime(ref.read(appwriteClientProvider));
+final appwriteRealtimeProvider = Provider<RealtimeSubscription>((ref) {
+  return Realtime(ref.read(appwriteClientProvider)).subscribe([
+    'collections.${ApiConstants.gamelobbyCollectionId}.documents',
+    'collections.${ApiConstants.gameMovesCollectionId}.documents'
+  ]);
 });
