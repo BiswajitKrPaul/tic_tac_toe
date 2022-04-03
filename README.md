@@ -10,7 +10,7 @@ A Tic Tac Toe Game made using Flutter and Appwrite.
 
 ### For Demo Check
 
-- Do a Pull request
+- `git clone https://github.com/BiswajitKrPaul/tic_tac_toe.git`
 
 - `flutter pub get`
 
