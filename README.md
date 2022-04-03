@@ -30,7 +30,7 @@ A Tic Tac Toe Game made using Flutter and Appwrite.
      - gameMoves - (integer[]) { min=-1 , max=1 }
      - winner - (integer) { min = 0 , max = 3 }
 
-- Create a **.env** file by the example provided in **.env.example**
+- Create a **.env** file from the example provided in **.env.example**
 
 - `flutter clean`
 
